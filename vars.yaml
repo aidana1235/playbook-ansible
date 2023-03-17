@@ -1,0 +1,13 @@
+---
+- name: "Intro to conditions"
+  hosts: all
+  become: yes
+  vars:
+    packages: [samba, samba-common]
+
+  tasks:
+  - name: "Install packages"
+    when: ansible_os_family == "Debian"
+    apt:
+      name: "{{ packages }}"
+      state: present

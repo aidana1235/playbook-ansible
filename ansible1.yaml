@@ -1,0 +1,32 @@
+---
+  - name: Create file
+    hosts: all
+    become: yes
+
+    tasks:
+      - name: Create file
+        file:
+          path: /home/ubuntu/1devx_file
+          state: touch
+
+      - name: Add user
+        user:
+          name: DevXers
+          uid: 1040
+
+      - name: "Copy file with permission"
+        ansible.builtin.copy:
+          src: /home/ubuntu/1devx_file
+          dest: /tmp/1devx_file
+          remote_src: yes
+          mode: u=rw,g=r,o=r
+
+
+      - name: Reboot instances
+        reboot:
+          reboot_command: reboot
+
+      - name: Test endpoint displaying file GNU.HTML
+        ansible.builtin.uri:
+          url: https://www.gnu.org/gnu/gnu.html
+          return_content: true
